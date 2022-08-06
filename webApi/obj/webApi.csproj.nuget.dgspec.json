@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\LENOVO\\dev\\recetarioComunitario\\webApi\\webApi.csproj": {}
+    "C:\\Users\\LENOVO\\dev\\SmarterLands\\webApi\\webApi.csproj": {}
   },
   "projects": {
-    "C:\\Users\\LENOVO\\dev\\recetarioComunitario\\webApi\\webApi.csproj": {
+    "C:\\Users\\LENOVO\\dev\\SmarterLands\\webApi\\webApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\LENOVO\\dev\\recetarioComunitario\\webApi\\webApi.csproj",
+        "projectUniqueName": "C:\\Users\\LENOVO\\dev\\SmarterLands\\webApi\\webApi.csproj",
         "projectName": "webApi",
-        "projectPath": "C:\\Users\\LENOVO\\dev\\recetarioComunitario\\webApi\\webApi.csproj",
+        "projectPath": "C:\\Users\\LENOVO\\dev\\SmarterLands\\webApi\\webApi.csproj",
         "packagesPath": "C:\\Users\\LENOVO\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\LENOVO\\dev\\recetarioComunitario\\webApi\\obj\\",
+        "outputPath": "C:\\Users\\LENOVO\\dev\\SmarterLands\\webApi\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\LENOVO\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -38,6 +38,28 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[6.0.7, )"
+            },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[6.0.7, )"
+            },
+            "Microsoft.EntityFrameworkCore.InMemory": {
+              "target": "Package",
+              "version": "[6.0.7, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[6.0.7, )"
+            },
+            "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
+              "target": "Package",
+              "version": "[6.0.7, )"
+            },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[6.2.3, )"
