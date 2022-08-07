@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BinApi.Models;
+#nullable enable
 
 namespace webApi.Controllers
 {
@@ -23,7 +24,7 @@ namespace webApi.Controllers
 
 
         // GET: api/SensorData
-        [HttpGet]
+        /*[HttpGet]
         public async Task<ActionResult<IEnumerable<SensorData>>> GetSensorData()
         {
           var sensorData = await _context.SensorData
@@ -35,24 +36,43 @@ namespace webApi.Controllers
               return NotFound();
           }
             return sensorData;
-        }
+        }*/
 
-        // GET: api/SensorData/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<SensorData>> GetSensorData(long id)
+        // GET: api/SensorData/?initialDate&latestDate
+        // Latest en sensors, con la fecha 
+        // Get para info de las graficas
+
+        [HttpGet]
+        
+        public async Task<ActionResult<SensorData>> GetSensorData(DateTime initialDate, DateTime? latestDate)
         {
-          if (_context.SensorData == null)
-          {
-              return NotFound();
-          }
-            var sensorData = await _context.SensorData.FindAsync(id);
+            List<SensorData> sensorData = new List<SensorData>();
 
-            if (sensorData == null)
+            if (_context.SensorData == null)
             {
                 return NotFound();
             }
 
-            return sensorData;
+            if(latestDate == null || DateTime.Compare(initialDate, (DateTime)latestDate) == 0){
+                sensorData = await _context.SensorData.Include(s=>s.Logger).Where(
+                    d => (d.Date.Year == initialDate.Year &&
+                    d.Date.Month == initialDate.Month && 
+                    d.Date.Date == initialDate.Date)
+                ).ToListAsync();
+            }
+
+            else if (DateTime.Compare(initialDate,(DateTime)latestDate) > 0){
+                return BadRequest(new{message = "InitialDate cannot be later thant latestDate"});
+            }
+
+            else{
+                sensorData = await _context.SensorData.Include(s=>s.Logger).Where(
+                    d=> d.Date >= initialDate && 
+                    d.Date <= latestDate
+                ).ToListAsync();
+            }
+
+            return Ok(sensorData); 
         }
 
         // PUT: api/SensorData/5

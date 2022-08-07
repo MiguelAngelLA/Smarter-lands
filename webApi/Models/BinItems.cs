@@ -10,14 +10,14 @@ namespace BinApi.Models{
         //Foreign key
         public long LoggerId {get; set;}
         //Navigation property
-        public Logger? Logger {get; set;}
+        public Logger Logger {get; set;}
     }
 
 
 //Primary model
     public class Bin{
         public long Id {get; set;}
-        public string? name {get; set;}
+        public string name {get; set;}
         public bool IsAutoEnabled {get;set;} = true;
         //Navigation property
         public List<SensorData> Sensors {get; set;}
