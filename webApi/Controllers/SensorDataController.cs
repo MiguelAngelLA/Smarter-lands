@@ -43,7 +43,6 @@ namespace webApi.Controllers
         // Get para info de las graficas
 
         [HttpGet]
-        
         public async Task<ActionResult<SensorData>> GetSensorData(DateTime initialDate, DateTime? latestDate)
         {
             List<SensorData> sensorData = new List<SensorData>();
@@ -74,6 +73,22 @@ namespace webApi.Controllers
 
             return Ok(sensorData); 
         }
+
+        [HttpGet]
+        [Route("/api/SensorData/Latest")] 
+        public async Task<ActionResult<SensorData>> getLatestSensorData()
+        {
+            //List<SensorData> sensorData = new List<SensorData>();
+            
+            var sensorData = await _context.SensorData.OrderByDescending(s=>s.Date).FirstAsync(
+                s=>(s.Date.Year == DateTime.Now.Year &&
+                    s.Date.Month == DateTime.Now.Month && 
+                    s.Date.Date == DateTime.Now.Date)
+            );
+
+            return Ok(sensorData);
+        }
+
 
         // PUT: api/SensorData/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
@@ -119,7 +134,7 @@ namespace webApi.Controllers
             _context.SensorData.Add(sensorData);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetSensorData", new { id = sensorData.Id }, sensorData);
+            return CreatedAtAction(nameof(GetSensorData), new { id = sensorData.Id }, sensorData);
         }
 
         // DELETE: api/SensorData/5
