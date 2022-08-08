@@ -43,10 +43,9 @@ namespace webApi.Controllers
         // Get para info de las graficas
 
         [HttpGet]
-        public async Task<ActionResult<SensorData>> GetSensorData(DateTime initialDate, DateTime? latestDate)
+        public async Task<ActionResult<SensorData>> GetSensorData(DateTime initialDate, DateTime? latestDate, long binId)
         {
             List<SensorData> sensorData = new List<SensorData>();
-
             if (_context.SensorData == null)
             {
                 return NotFound();
@@ -56,7 +55,8 @@ namespace webApi.Controllers
                 sensorData = await _context.SensorData.Include(s=>s.Logger).Where(
                     d => (d.Date.Year == initialDate.Year &&
                     d.Date.Month == initialDate.Month && 
-                    d.Date.Date == initialDate.Date)
+                    d.Date.Date == initialDate.Date &&
+                    d.BinId == binId)
                 ).ToListAsync();
             }
 
@@ -65,10 +65,21 @@ namespace webApi.Controllers
             }
 
             else{
+                try
+                {
                 sensorData = await _context.SensorData.Include(s=>s.Logger).Where(
                     d=> d.Date >= initialDate && 
-                    d.Date <= latestDate
+                    d.Date <= latestDate &&
+                    d.BinId == binId
                 ).ToListAsync();
+                }
+                catch(Exception e)
+                {
+                    return BadRequest(new{
+                        message = "An error has occured while procesing your request. Don't forget to check if the Bin Identifier is a valid one!",
+                        errorString = e.GetType().ToString()
+                    });
+                }
             }
 
             return Ok(sensorData); 
@@ -76,17 +87,24 @@ namespace webApi.Controllers
 
         [HttpGet]
         [Route("/api/SensorData/Latest")] 
-        public async Task<ActionResult<SensorData>> getLatestSensorData()
+        public async Task<ActionResult<SensorData>> getLatestSensorData(long? binId)
         {
-            //List<SensorData> sensorData = new List<SensorData>();
-            
+
+            try{
             var sensorData = await _context.SensorData.OrderByDescending(s=>s.Date).FirstAsync(
                 s=>(s.Date.Year == DateTime.Now.Year &&
                     s.Date.Month == DateTime.Now.Month && 
-                    s.Date.Date == DateTime.Now.Date)
+                    s.Date.Date == DateTime.Now.Date &&
+                    s.BinId == binId)
             );
 
-            return Ok(sensorData);
+            return Ok(sensorData);}
+            catch(Exception e){
+                return BadRequest(new{
+                    message = "An error has occured while procesing your request. Don't forget to check if the Bin Identifier is a valid one!",
+                    errorString = e.GetType().ToString()
+                });
+            }
         }
 
 
