@@ -37,6 +37,7 @@ if (app.Environment.IsDevelopment())
     app.UseDeveloperExceptionPage();
     app.UseSwagger();
     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "SmarterApi v1"));
+    app.UseCors();
 }
 
 app.UseCors("Specific Origins");
