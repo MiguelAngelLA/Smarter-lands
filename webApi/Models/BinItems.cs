@@ -7,6 +7,7 @@ namespace BinApi.Models{
         public int? TemperatureC {get; set;}
         public float? Humidity {get; set;}
         public float? Moisture {get; set;}
+        public float? precipitation {get; set;}
         //Foreign key
         public long LoggerId {get; set;}
         //Navigation property

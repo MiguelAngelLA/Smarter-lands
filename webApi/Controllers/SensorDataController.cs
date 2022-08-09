@@ -1,10 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.SignalR;
+
 using BinApi.Models;
 #nullable enable
 
@@ -14,29 +11,15 @@ namespace webApi.Controllers
     [ApiController]
     public class SensorDataController : ControllerBase
     {
-        private readonly BinContext _context;
+        private readonly BinContext _context;     
+        private readonly IHubContext<BinDataSingalR.Hubs.BinDataHub> _binDataHub;   
 
-        public SensorDataController(BinContext context)
+        public SensorDataController(BinContext context, IHubContext<BinDataSingalR.Hubs.BinDataHub> binDataHub)
         {
             _context = context;
+            _binDataHub = binDataHub; 
 
         }
-
-
-        // GET: api/SensorData
-        /*[HttpGet]
-        public async Task<ActionResult<IEnumerable<SensorData>>> GetSensorData()
-        {
-          var sensorData = await _context.SensorData
-          .Include(l => l.Logger)
-          .ToListAsync();
-          
-          if (_context.SensorData == null)
-          {
-              return NotFound();
-          }
-            return sensorData;
-        }*/
 
         // GET: api/SensorData/?initialDate&latestDate
         // Latest en sensors, con la fecha 
@@ -91,14 +74,15 @@ namespace webApi.Controllers
         {
 
             try{
-            var sensorData = await _context.SensorData.OrderByDescending(s=>s.Date).FirstAsync(
-                s=>(s.Date.Year == DateTime.Now.Year &&
-                    s.Date.Month == DateTime.Now.Month && 
-                    s.Date.Date == DateTime.Now.Date &&
-                    s.BinId == binId)
-            );
-
-            return Ok(sensorData);}
+                var sensorData = await _context.SensorData.OrderByDescending(s=>s.Date).FirstAsync(
+                    s=>(s.Date.Year == DateTime.Now.Year &&
+                        s.Date.Month == DateTime.Now.Month && 
+                        s.Date.Date == DateTime.Now.Date &&
+                        s.BinId == binId)
+                );
+                
+                return Ok(sensorData);
+            }
             catch(Exception e){
                 return BadRequest(new{
                     message = "An error has occured while procesing your request. Don't forget to check if the Bin Identifier is a valid one!",
@@ -151,6 +135,8 @@ namespace webApi.Controllers
 
             _context.SensorData.Add(sensorData);
             await _context.SaveChangesAsync();
+            //send to Hub
+            await _binDataHub.Clients.All.SendAsync("ReceiveDBinData", sensorData);
 
             return CreatedAtAction(nameof(GetSensorData), new { id = sensorData.Id }, sensorData);
         }
