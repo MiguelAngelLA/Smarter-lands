@@ -41,7 +41,7 @@
                     <i class="fa-solid fa-cloud-showers-heavy icon-properties"></i>
                 </div>
         
-                <div class="text-percentage">%</div>
+                <div class="text-percentage">{{LatestSensorList.precipitation}}%%</div>
                 <div class="text-name">Precipitación</div>
             </div>
 
@@ -59,7 +59,7 @@
         </div>
     </div>
 
-    <div class="water-button-outer"> <button type="button" class="btn btn-primary" (click)="regarBoton()">Regar</button></div>
+    <div class="water-button-outer"> <button type="button" class="btn btn-primary" (click)="regarBoton()" [disabled]="LatestSensorList.precipitation <=60">Regar</button></div>
 </div>
 
 
