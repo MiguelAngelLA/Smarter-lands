@@ -1,0 +1,35 @@
+<div class="container-fluid">
+    <div class="row">
+        <div  id="nav-backgroundcolor" class="col-sm sticky-top nav-properties">
+            <div class="d-flex flex-sm-column flex-row flex-nowrap align-items-center sticky-top">
+                <a href="/" class="d-block  text-decoration-none" title="" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Icon-only">
+                    <img src="assets/images/logo_transparent.png" alt=""  class="nav-logo">
+                </a>
+                <ul class="nav nav-pills nav-flush flex-sm-column flex-row flex-nowrap mb-auto mx-auto text-center justify-content-between w-100 px-3 align-items-center">
+                    <li class="nav-item">
+                        <a class="nav-link py-5 px-2" title="" routerLink="bin-one" (click)="getColor1()">
+                            <i class="fa-solid fa-gauge nav-icon "(click)="getColor1()" [ngClass]="status ==='active' ? 'status-active' : 'status-inactive'"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="nav-link py-3 px-2" title="" routerLink="bin-two" (click)="getColor2()">
+                            <i class="fa-solid fa-chart-line nav-icon" (click)="getColor2()" [ngClass]="status2 ==='active' ? 'status-active' : 'status-inactive'"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="nav-link py-5 px-2" title="" routerLink="bin-three" (click)="getColor3()">
+                            <i class="fa-solid fa-gauge-high nav-icon" (click)="getColor3()" [ngClass]="status3 ==='active' ? 'status-active' : 'status-inactive'"></i>
+                        </a>
+                    </li>
+
+                </ul>
+
+            </div>
+        </div>
+        <div class="col-sm min-vh-100 content">
+            <!-- content -->
+
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+</div>

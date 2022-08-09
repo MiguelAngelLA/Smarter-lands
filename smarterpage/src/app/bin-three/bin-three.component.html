@@ -1,0 +1,136 @@
+<div id="right-sidepanel" >
+    <button class="btn btn-success refresh" (click)="ChartsRefresh()"><i class="fa-solid fa-arrow-rotate-right"></i></button>
+    <div class="right-image">
+        <i class="fa-solid fa-wheat-awn"></i>
+    </div>
+    <div class="right-text-outer">
+        <p class="right-text">Cultivo Cereales</p>
+    </div>
+    <div class="sensors-outer">
+        <p class="sensors-title">Sensores</p>
+        <div class="sensors">
+            <div class="card-outer card-properties">
+                <div class="icon-outer">
+                    <i class="fa-solid fa-droplet icon-properties"></i>
+                </div>
+        
+                <div class="text-percentage">{{LatestSensorList.moisture}}%</div>
+                <div class="text-name">Humedad Tierra</div>
+            </div>
+
+            <div class="card-outer card-properties">
+                <div class="icon-outer">
+                    <i class="fa-solid fa-temperature-half icon-properties"></i>
+                </div>
+        
+                <div class="text-percentage">{{LatestSensorList.temperatureC}}°C</div>
+                <div class="text-name">Temperatura</div>
+            </div>
+
+            <div class="card-outer card-properties">
+                <div class="icon-outer">
+                    <i class="fa-solid fa-wind icon-properties"></i>
+                </div>
+        
+                <div class="text-percentage">{{LatestSensorList.humidity}}%</div>
+                <div class="text-name">Humedad Aire</div>
+            </div>
+
+            <div class="card-outer card-properties">
+                <div class="icon-outer">
+                    <i class="fa-solid fa-cloud-showers-heavy icon-properties"></i>
+                </div>
+        
+                <div class="text-percentage">%</div>
+                <div class="text-name">Precipitación</div>
+            </div>
+
+        </div>
+        <p class="sensors-state">Ultima vez actualizado: <br>{{update}}</p>
+    </div>
+
+    <div class="bin-layout-outer">
+        <div class="bin-layout">
+            <div class="bin-actual b1">1</div>
+            <div class="bin-layout-group">
+                <div class="bin-actual b2">2</div>
+                <div class="bin-actual b3">3</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="water-button-outer"> <button type="button" class="btn btn-primary" (click)="regarBoton()">Regar</button></div>
+</div>
+
+
+<div class="picker-hour">
+    <div class="date-picker">
+        <mat-form-field  appearance="outline" class="my-form-field">
+            <mat-label>Seleccione Fechas</mat-label>
+            <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+                <input matStartDate formControlName="start" placeholder="Fecha Inicial">
+                <input matEndDate formControlName="end" placeholder="Fecha Final">
+            </mat-date-range-input>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-date-range-picker #picker></mat-date-range-picker>
+
+            <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">Invalid start date</mat-error>
+            <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
+        </mat-form-field>
+
+        <button class="btn btn-danger" (click)="loadData()" >Seleccionar</button>
+    </div>
+
+    <div class="date-hour">
+        
+        <div class="date-outer">
+            <div class="date-icon"><i class="fa-solid fa-calendar-days icon-styles"></i></div>
+            <div class="date-text"> {{date}}</div>
+        </div>
+
+        <div class="date-outer2">
+            <div class="date-icon"><i class="fa-regular fa-clock icon-styles"></i></div>
+            <div class="date-text"> {{ rxTime | date: 'hh:mm:ss a' }} </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+<div class="charts">
+
+    <div class="group-one">
+        <div class="divChart">
+            <canvas id="dirtHumid"></canvas>
+        </div>
+
+        <div class="divChart">
+            <canvas id="tempChart"></canvas>
+        </div>
+    </div>
+
+    <div class="group-two">
+        <div class="divChartAir">
+            <canvas id="airHumid"></canvas>
+        </div>
+
+        <div class="divLog" id="style1">
+            <div class="log-data-outer" *ngFor="let data of logList ; let i = index">
+                <div class="data-text log-text" [className]="getBorder(data.logger.loggerType)"> {{data.logger.body}} </div>
+                <div class="data-status status-red" [ngStyle]="{'background-color': getColor(data.logger.loggerType)}">
+                    <div class="data-icon"><i class="fa-solid" [className]="getIcon(data.logger.loggerType)"></i></div>
+                    <div class="data-time">{{hourList[i]}}</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+
+
+
+
